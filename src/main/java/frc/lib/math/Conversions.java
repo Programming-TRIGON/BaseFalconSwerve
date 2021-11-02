@@ -67,4 +67,12 @@ public class Conversions {
         return wheelVelocity;
     }
 
+    /**
+     * @param magTicks the ticks from the mag sensor
+     * @return the angle in degrees
+     */
+    public static double MagToDegrees(double magTicks){
+        return (magTicks+4096)/4096f*360;
+    }
+
 }
