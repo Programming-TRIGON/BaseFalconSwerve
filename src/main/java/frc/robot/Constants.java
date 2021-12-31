@@ -18,14 +18,17 @@ public final class Constants {
         /* Drivetrain Constants */
         public static final double trackWidth = 0.29765*2;
         public static final double wheelBase = 0.29765*2;
-        public static final double wheelDiameter = 0.1016;
+        public static final double wheelDiameter = 0.1;
         public static final double wheelCircumference = wheelDiameter * Math.PI;
 
-        public static final double openLoopRamp = 0.25;
-        public static final double closedLoopRamp = 0.0;
+        public static final double angleOpenLoopRamp = 2;
+        public static final double angleClosedLoopRamp = .5;
 
-        public static final double driveGearRatio = (6.86 / 1.0); //6.86:1
-        public static final double angleGearRatio = (12.8 / 1.0); //12.8:1
+        public static final double driveOpenLoopRamp = 0.1;
+        public static final double driveClosedLoopRamp = 0.1;
+
+        public static final double driveGearRatio = (8.14 / 1.0);
+        public static final double angleGearRatio = (12.8 / 1.0);
 
         public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
                 new Translation2d(wheelBase / 2.0, trackWidth / 2.0),
@@ -43,6 +46,8 @@ public final class Constants {
         public static final int drivePeakCurrentLimit = 60;
         public static final double drivePeakCurrentDuration = 0.1;
         public static final boolean driveEnableCurrentLimit = true;
+
+        public static final double speedDivider = 1;
 
         /* Angle Motor PID Values */
         public static final double angleKP = 0.1;
@@ -67,7 +72,7 @@ public final class Constants {
 
         /* Neutral Modes */
         public static final NeutralMode angleNeutralMode = NeutralMode.Coast;
-        public static final NeutralMode driveNeutralMode = NeutralMode.Brake;
+        public static final NeutralMode driveNeutralMode = NeutralMode.Coast;
 
         /* Motor Inverts */
         public static final boolean driveMotorInvert = false;
@@ -82,7 +87,7 @@ public final class Constants {
             public static final int driveMotorID = 2;
             public static final int angleMotorID = 3;
             public static final int canCoderID = 8;
-            public static final double angleOffset = 215.9;
+            public static final double angleOffset = 333.8;
             public static final SwerveModuleConstants constants =
                     new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -92,7 +97,7 @@ public final class Constants {
             public static final int driveMotorID = 0;
             public static final int angleMotorID = 1;
             public static final int canCoderID = 9;
-            public static final double angleOffset = 288;
+            public static final double angleOffset = 209;
             public static final SwerveModuleConstants constants =
                     new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -102,7 +107,7 @@ public final class Constants {
             public static final int driveMotorID = 6;
             public static final int angleMotorID = 7;
             public static final int canCoderID = 11;
-            public static final double angleOffset = 122.2;
+            public static final double angleOffset = 323.2  ;
             public static final SwerveModuleConstants constants =
                     new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -112,7 +117,7 @@ public final class Constants {
             public static final int driveMotorID = 4;
             public static final int angleMotorID = 5;
             public static final int canCoderID = 10;
-            public static final double angleOffset = 342.15;
+            public static final double angleOffset = 215.55;
             public static final SwerveModuleConstants constants =
                     new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }

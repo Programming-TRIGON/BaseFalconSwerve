@@ -11,8 +11,11 @@ import frc.lib.math.Conversions;
 import frc.lib.util.CTREModuleState;
 import frc.lib.util.SwerveModuleConstants;
 
+import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 
@@ -52,32 +55,30 @@ public class SwerveModule {
         if (deg < 0)
             deg += 360;
         //mAngleMotor.setSelectedSensorPosition(Conversions.degreesToFalcon(deg, Constants.Swerve.angleGearRatio));
-        if(moduleNumber == 1)
-            SmartDashboard.putNumber("Mod 1 diff", Conversions.falconToDegrees(mAngleMotor.getSelectedSensorPosition(), Constants.Swerve.angleGearRatio) - deg);
-        if(moduleNumber == 3)
-            SmartDashboard.putNumber("Mod 3 diff", Conversions.falconToDegrees(mAngleMotor.getSelectedSensorPosition(), Constants.Swerve.angleGearRatio) - deg);
         desiredState.angle = Rotation2d.fromDegrees(-desiredState.angle.getDegrees());
         desiredState = CTREModuleState.optimize(desiredState, getState().angle); //Custom optimize command, since default WPILib optimize assumes continuous controller which CTRE is not
-        SmartDashboard.putNumber("Mod " + this.moduleNumber + " Desired", desiredState.angle.getDegrees());
         if(isOpenLoop){
             double percentOutput = desiredState.speedMetersPerSecond / Constants.Swerve.maxSpeed;
-            mDriveMotor.set(ControlMode.PercentOutput, percentOutput/15);
+            mDriveMotor.set(ControlMode.PercentOutput, percentOutput/Constants.Swerve.speedDivider);
         }
         else {
             double velocity = Conversions.MPSToFalcon(desiredState.speedMetersPerSecond, Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio);
             mDriveMotor.set(ControlMode.Velocity, velocity/15, DemandType.ArbitraryFeedForward, feedforward.calculate(desiredState.speedMetersPerSecond));
         }
 
-        double angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01)) ? lastAngle : desiredState.angle.getDegrees(); //Prevent rotating module if speed is less then 1%. Prevents Jittering.
-        mAngleMotor.set(ControlMode.Position, Conversions.degreesToFalcon(angle, Constants.Swerve.angleGearRatio));
+        double desiredAngle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01)) ? lastAngle : desiredState.angle.getDegrees(); //Prevent rotating module if speed is less then 1%. Prevents Jittering.
+        mAngleMotor.set(ControlMode.Position, Conversions.degreesToFalcon(desiredAngle, Constants.Swerve.angleGearRatio));
         if(moduleNumber == 2)
-            SmartDashboard.putNumber("Mod 2 angle", angle);
-        lastAngle = angle;
+            SmartDashboard.putNumber("Mod 2 angle", desiredAngle);
+        lastAngle = desiredAngle;
+        SmartDashboard.putNumber("Mod " + this.moduleNumber + " Desired", desiredAngle);
+        
     }
 
     private void resetToAbsolute(){
         double absolutePosition = Conversions.degreesToFalcon(getCanCoder().getDegrees() - angleOffset, Constants.Swerve.angleGearRatio);
-        mAngleMotor.setSelectedSensorPosition(absolutePosition);
+        ErrorCode errorCode = mAngleMotor.setSelectedSensorPosition(absolutePosition, 0, 50);
+        System.out.println(angleEncoder.getDeviceID() + ":" + errorCode.value);
     }
 
     private void configAngleEncoder(){        
@@ -92,6 +93,8 @@ public class SwerveModule {
         mAngleMotor.configAllSettings(Robot.ctreConfigs.swerveAngleFXConfig);
         mAngleMotor.setInverted(Constants.Swerve.angleMotorInvert);
         mAngleMotor.setNeutralMode(Constants.Swerve.angleNeutralMode);
+        mAngleMotor.configRemoteFeedbackFilter(angleEncoder.getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor, 0);
+        mAngleMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
         resetToAbsolute();
     }
 

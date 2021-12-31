@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
 import frc.robot.SwerveModule;
@@ -21,7 +22,7 @@ public class Swerve extends SubsystemBase {
     public PigeonIMU gyro;
 
     public Swerve() {
-        gyro = new PigeonIMU(Constants.Swerve.pigeonID);
+        gyro = new PigeonIMU(new TalonSRX( Constants.Swerve.pigeonID));
         gyro.configFactoryDefault();
         zeroGyro();
         
@@ -100,5 +101,7 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
+        SmartDashboard.putNumber("PigeonIMU", getYaw().getDegrees());
+           
     }
 }
