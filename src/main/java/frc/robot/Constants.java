@@ -45,7 +45,7 @@ public final class Constants{
         public static final double drivePeakCurrentDuration = 0.1;
         public static final boolean driveEnableCurrentLimit = true;
 
-        public static final double speedDivider = 2;
+        public static final double speedDivider = 6;
 
         /* Angle Motor PID Values */
         public static final double angleKP = 0.1;
@@ -82,8 +82,8 @@ public final class Constants{
         /* Module Specific Constants */
         /* Front Left Module - Module 0 */
         public static final class Mod0{
-            public static final int driveMotorID = 2;
-            public static final int angleMotorID = 3;
+            public static final int driveMotorID = 16;
+            public static final int angleMotorID = 15;
             public static final int canCoderID = 8;
             public static final double angleOffset = 207.6;
             public static final SwerveModuleConstants constants =
@@ -92,8 +92,8 @@ public final class Constants{
 
         /* Front Right Module - Module 1 */
         public static final class Mod1{
-            public static final int driveMotorID = 0;
-            public static final int angleMotorID = 1;
+            public static final int driveMotorID = 14;
+            public static final int angleMotorID = 13;
             public static final int canCoderID = 9;
             public static final double angleOffset = 329.5;
             public static final SwerveModuleConstants constants =
