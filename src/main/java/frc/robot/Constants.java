@@ -45,7 +45,7 @@ public final class Constants{
         public static final double drivePeakCurrentDuration = 0.1;
         public static final boolean driveEnableCurrentLimit = true;
 
-        public static final double speedDivider = 6;
+        public static final double speedDivider = 1;
 
         /* Angle Motor PID Values */
         public static final double angleKP = 0.1;

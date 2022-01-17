@@ -46,6 +46,7 @@ public class SwerveModule{
         desiredState = CTREModuleState.optimize(desiredState, getState().angle); //Custom optimize command, since default WPILib optimize assumes continuous controller which CTRE is not
         if(isOpenLoop){
             double percentOutput = desiredState.speedMetersPerSecond / Constants.Swerve.maxSpeed;
+            percentOutput = Math.signum(percentOutput) * Math.pow(percentOutput, 2);
             mDriveMotor.set(ControlMode.PercentOutput, percentOutput / Constants.Swerve.speedDivider);
         } else{
             double velocity = Conversions.MPSToFalcon(desiredState.speedMetersPerSecond, Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio);
